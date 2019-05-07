@@ -109,7 +109,90 @@ class Ui_MainWindow(object):
         self.widgetLayout.setObjectName("graphicsView")
         self.widgetLayout.show()
 
+        comb = QComboBox(self.widgetLayout)
+        comb.setGeometry(150,50,251,41)
+        comb.addItem("TCP source port")
+        comb.addItem("UDP source port")
+        comb.addItem("Any incoming port")
+        comb.show()
+    
         
+
+
+         #label
+        l2 = QLabel(self.widgetLayout)
+        l2.setGeometry(50,300,500,70)
+        l2.setText("The block port or domain name will add in black list you can remove \n it from black list menu")
+        l2.show()
+
+        #label
+        l1 = QLabel(self.widgetLayout)
+        l1.setGeometry(60,233,400,17)
+        l1.setText("Enter the TCP Port")
+        l1.show()
+
+        #input field
+        inp1 =  QLineEdit(self.widgetLayout)
+        inp1.setGeometry(191,228,222,32)
+        inp1.show()
+
+
+        #btn
+        pushBtn =  QPushButton(self.widgetLayout)
+        pushBtn.setObjectName("click me")
+        pushBtn.setText("OK")
+        pushBtn.setGeometry(QtCore.QRect(370,490,115,32))
+        pushBtn.show()
+
+        pushBtn.clicked.connect(lambda: self.onPortBtnClick(inp1,comb))
+        comb.currentTextChanged.connect(lambda: self.onPortConfugureCombochnage(comb,l1,inp1))
+        # inp1.textChanged.connect(lambda: self.onBlocklistInpChange(inp1)) 
+
+
+    
+    def onPortConfugureCombochnage(self,comb,l1,inp1):
+
+        if comb.currentText() == "TCP source port":
+            l1.clear()
+            l1.setText("Enter the TCP port")
+
+
+        if comb.currentText() == "UDP source port":
+            l1.clear()
+            l1.setText("Enter the UDP port")
+        
+            
+        
+        if comb.currentText() == "Any incoming port":
+            l1.clear()
+            l1.setText("Enter port")
+                    
+
+    def onPortBtnClick(self,inp1,comb):
+        text = inp1.text()
+        current_text = comb.currentText()
+        msgbox = QMessageBox()
+        if text:
+            r1 = re.match(r"(^[1-9]*$)",text)
+            if r1:
+                text = int(text)
+                if text > 65536:
+                    print("invalid")
+                    
+                    msgbox.information(self.centralwidget,"warning","Invalid port")
+                else:
+                    
+
+                    print("valid")
+                    #here function call
+            else:
+                print("invlaide")
+                msgbox.information(self.centralwidget,"warning","string error!")
+        else:
+            msgbox.information(self.centralwidget,"warning","Empty Field")
+
+
+
         
        
 
